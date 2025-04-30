@@ -61,6 +61,7 @@ class AdminController extends Controller
      */
     public function deleteTour($id)
     {
+        
         $tour = Tour::find($id);
         if (!$tour) {
             return response()->json(['message' => 'Tour not found'], 404);
