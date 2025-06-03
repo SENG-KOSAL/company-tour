@@ -28,9 +28,8 @@ class TourContoller extends Controller
             'duration_days' => $request->duration_days,
             'price_per_person' => $request->price_per_person,
             'available_slots' => $request->available_slots,
-            'image_url' => $request->image_url,
+            'image_url' => $request->image_url, 
         ]);
-
         return response()->json([
             'message' => 'Tour created successfully!',
             'tour' => $tour
@@ -44,5 +43,25 @@ class TourContoller extends Controller
             'message' => 'Tours retrieved successfully!',
             'tours' => $tours
         ], 200);
+    }   
+    public function getTours4(Request $request)
+    {
+        $limit = $request->query('limit'); // Default to 4 if not provided    ,4 
+
+        $tours = Tour::paginate($limit); // Use pagination
+
+        return response()->json($tours); // Laravel automatically formats pagination
+    }
+
+
+    public function getTourById($id)
+    {
+        $tour = Tour::find($id);
+
+        if (!$tour) {
+            return response()->json(['message' => 'Tour not found'], 404);
+        }
+
+        return response()->json($tour);
     }
 }

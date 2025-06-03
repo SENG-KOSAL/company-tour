@@ -6,6 +6,8 @@ use App\Http\Controllers\UsersContoller;
 
 use App\Http\Controllers\TourContoller;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BookingController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -22,11 +24,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 ///
 Route::post('/users', [UsersContoller::class, 'createUser']);
-Route::get('/users', [UsersContoller::class, 'getUsers']); // Add this
+// Route::get('/users', [UsersContoller::class, 'getUsers']); // Add this
 
 
 Route::post('/tours', [TourContoller::class, 'store']);
 Route::get('/tours', [TourContoller::class, 'getTours']);
+Route::get('/tours/{id}', [TourContoller::class, 'getTourById']);
+Route::get('/tours4', [TourContoller::class, 'getTours4']);
 
 Route::middleware('auth:sanctum')->group(function () {
 
@@ -45,6 +49,21 @@ Route::middleware('auth:sanctum')->group(function () {
     // User Management
     Route::get('/admin/users', [AdminController::class, 'getAllUsers']);
     Route::delete('/admin/users/{id}', [AdminController::class, 'deleteUser']);
+});
+
+
+//booking contoller
+Route::get('/bookings', [BookingController::class, 'getBookings']); // ⚠️ Now public
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/users', [UsersContoller::class, 'getUsers']); // Add this
+    Route::post('/bookings', [BookingController::class, 'createBooking']);
+    // Route::get('/bookings', [BookingController::class, 'getBookings']);
+    Route::get('/bookings/{id}', [BookingController::class, 'getBookingById']);
+    Route::put('/bookings/{id}', [BookingController::class, 'updateBooking']);
+    Route::delete('/bookings/{id}/cancel', [BookingController::class, 'cancelBooking']);
+    // Cancel booking (if you create a specific method)
+    // Route::put('/bookings/{id}/cancel', [BookingController::class, 'cancel']);
 });
 
 //admin route

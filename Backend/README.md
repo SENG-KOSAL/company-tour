@@ -64,3 +64,13 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+the problem is booking , about the relationship !!! , check the migrate 20/05/2025 | , "it's work already  (21/05/2025)  "
+
+
+
+
+05/28/2025
+
+Number of people booking tour error , slot is 2 but booking can book 3

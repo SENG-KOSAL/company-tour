@@ -1,9 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Tour;
+use App\Models\Booking;
+
 class AdminController extends Controller
 {
     //thiss all about the Tours
@@ -23,18 +26,18 @@ class AdminController extends Controller
             'available_slots' => 'required|integer',
             'image_url' => 'required|url',
         ]);
-    
+
         $tour = Tour::create($validated);
-    
+
         return response()->json([
             'message' => 'Tour created successfully',
             'tour' => $tour,
-        ], 201); 
+        ], 201);
     }
 
 
 
-    
+
     public function getAllTours()
     {
         return response()->json(Tour::all(), 200);
@@ -61,7 +64,7 @@ class AdminController extends Controller
      */
     public function deleteTour($id)
     {
-        
+
         $tour = Tour::find($id);
         if (!$tour) {
             return response()->json(['message' => 'Tour not found'], 404);
@@ -100,12 +103,43 @@ class AdminController extends Controller
     {
         return response()->json([
             'message' => 'Welcome to the admin dashboard!!!!!!!!!!!!!!!!!!!!!!!!!',
-            
+
         ]);
     }
 
 
 
+//booking admin contoller (that all about the booking contoller)
+    // View all bookings
+    public function indexBookings()
+    {
+        $bookings = Booking::with(['user', 'tour'])->latest()->get();
+        return response()->json($bookings);
+    }
 
+    // Update booking status (e.g., confirm/cancel)
+    public function updateBookingStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:pending,confirmed,canceled'
+        ]);
 
+        $booking = Booking::findOrFail($id);
+        $booking->status = $request->status;
+        $booking->save();
+
+        return response()->json([
+            'message' => 'Booking status updated',
+            'data' => $booking
+        ]);
+    }
+
+    // Delete a booking
+    public function deleteBooking($id)
+    {
+        $booking = Booking::findOrFail($id);
+        $booking->delete();
+
+        return response()->json(['message' => 'Booking deleted']);
+    }
 }
